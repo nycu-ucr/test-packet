@@ -9,19 +9,26 @@ pcap = rdpcap("gtp-ping.pcap")
 outer_payload_len = 1024
 ping_loop_times = 100
 
+SRC_MAC = "3c:fd:fe:73:86:50"
+DST_MAC = "3c:fd:fe:73:82:a0"
+SRC_OUTER_IP = "10.100.200.1"
+DST_OUTER_IP = "10.100.200.3"
+SRC_INNER_IP = "60.60.0.1"
+DST_INNER_IP = "192.168.0.1"
+
 for packet in pcap:
     #print(packet[GTP_U_Header][ICMP])
     #packet[GTP_U_Header][ICMP] = pincap[0][ICMP]
 
     x = packet[Ether]
-    x.src = "3c:fd:fe:73:86:50"
-    x.dst = "3c:fd:fe:73:82:a0"
+    x.src = SRC_MAC
+    x.dst = DST_MAC
     x.type = 0x800
     del x.chksum
 
     y = packet[IP]
-    y.src = "10.100.200.1"
-    y.dst = "10.100.200.3"
+    y.src = SRC_OUTER_IP
+    y.dst = DST_OUTER_IP
     y.len = outer_payload_len
     del y.chksum
 
@@ -37,8 +44,8 @@ for packet in pcap:
     del w.chksum
 
     z = packet[GTP_U_Header][IP]
-    z.src = "60.60.0.1"
-    z.dst = "192.168.0.1"
+    z.src = SRC_INNER_IP
+    z.dst = DST_INNER_IP
     inner_payload_len = gtp_len - 4 # 4 for GTP seq and padding
     z.len = inner_payload_len
     del z.chksum
