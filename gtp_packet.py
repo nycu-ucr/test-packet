@@ -7,7 +7,7 @@ from scapy.contrib.gtp import *
 
 pcap = rdpcap("gtp-ping.pcap")
 outer_payload_len = 1024
-ping_loop_times = 100
+ping_loop_times = 256
 
 SRC_MAC = "3c:fd:fe:73:86:50"
 DST_MAC = "3c:fd:fe:73:82:a0"
@@ -63,7 +63,7 @@ for packet in pcap:
     wrpcap("gtp_icmp_echo_request.pcap", packet)
 
     #send(y)
-    #for i in range(100):
-    #    wrpcap("gtp_icmp_echo_request_loop.pcap", packet, append=True)
+    for i in range(ping_loop_times):
+        wrpcap("gtp_icmp_echo_request_loop.pcap", packet, append=True)
     #send(packet, loop=10)
     #send(packet)
