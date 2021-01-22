@@ -1,5 +1,6 @@
-#!/bin/env python3
+#!/usr/bin/python3
 
+import sys
 from scapy.all import *
 import scapy.contrib.gtp
 
@@ -9,12 +10,15 @@ pcap = rdpcap("gtp-ping.pcap")
 outer_payload_len = 68
 ping_loop_times = 256
 
-SRC_MAC = "3c:fd:fe:73:86:50"
-DST_MAC = "3c:fd:fe:73:82:a0"
+SRC_MAC = "3c:fd:fe:73:82:a0"
+DST_MAC = "3c:fd:fe:73:86:50"
 SRC_OUTER_IP = "10.100.200.1"
 DST_OUTER_IP = "10.100.200.3"
 SRC_INNER_IP = "60.60.0.1"
 DST_INNER_IP = "192.168.0.1"
+
+if len(sys.argv) == 2:
+    outer_payload_len = int(str(sys.argv[1]))
 
 for packet in pcap:
     #print(packet[GTP_U_Header][ICMP])
